@@ -1578,4 +1578,378 @@ ul { list-style: none; }
   background: linear-gradient(135deg, var(--gold), var(--gold-deep));
   color: var(--bg);
 }
-.
+.radio em.free-tag {
+  background: rgba(99, 200, 130, 0.15);
+  color: #6dd58f;
+  border: 1px solid rgba(109, 213, 143, 0.4);
+}
+.radio:has(input:checked) em.free-tag {
+  background: rgba(99, 200, 130, 0.25);
+}
+
+/* ============================================
+   COURSE GRID 4 卡片版面
+   ============================================ */
+.course-grid-4 {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+/* 線上 / 套餐 徽章 */
+.course-badge.badge-online {
+  background: linear-gradient(135deg, #6dd58f, #4ea870);
+  color: #0a0a0f;
+}
+.course-badge.badge-bundle {
+  background: linear-gradient(135deg, #f5d970, var(--gold-deep));
+  color: var(--bg);
+  letter-spacing: 0.15em;
+}
+
+/* 高階班 syllabus-major 樣式（標題+小字描述） */
+.syllabus-major {
+  display: flex !important;
+  flex-direction: column;
+  gap: 12px;
+  grid-template-columns: 1fr !important;
+}
+.syllabus-major li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.syllabus-major li > span {
+  font-family: var(--display);
+  font-size: 11px;
+  color: var(--gold-deep);
+  flex-shrink: 0;
+  width: 18px;
+  margin-top: 2px;
+}
+.syllabus-major li > div { flex: 1; }
+.syllabus-major li strong {
+  display: block;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 13.5px;
+  margin-bottom: 3px;
+  letter-spacing: 0.04em;
+}
+.syllabus-major li em {
+  font-style: normal;
+  color: var(--text-mute);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+}
+
+/* ============================================
+   ENROLL MODAL 彈窗
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--t-base);
+  padding: 24px;
+  overflow-y: auto;
+}
+.modal-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 44px 40px 36px;
+  max-width: 640px;
+  width: 100%;
+  position: relative;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  transform: translateY(30px) scale(0.97);
+  transition: transform 0.4s var(--t-base);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), var(--shadow-glow);
+}
+.modal-overlay.is-open .modal {
+  transform: translateY(0) scale(1);
+}
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--line);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.3s var(--t-base);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close:hover {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--gold);
+  transform: rotate(90deg);
+}
+.modal-header { margin-bottom: 24px; padding-right: 40px; }
+.modal-header .section-label { display: inline-block; margin-bottom: 12px; }
+.modal-header h3 {
+  font-family: var(--serif);
+  font-size: 26px;
+  margin: 0 0 16px;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.modal-course {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(212, 175, 55, 0.06);
+  border-left: 2px solid var(--gold);
+  border-radius: 0 4px 4px 0;
+}
+.mc-label {
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--text-mute);
+}
+.modal-course strong {
+  font-family: var(--serif);
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+.modal .contact-form {
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+body.modal-open { overflow: hidden; }
+
+/* ============================================
+   COURSE CARDS：徽章/版面修正 + RWD
+   ============================================ */
+/* 預設 2x2 版面已在前面定義；此處為徽章修正 */
+.course-grid-4 .course-badge {
+  top: 14px;
+  right: 14px;
+  font-size: 10px;
+  padding: 5px 12px;
+  letter-spacing: 0.18em;
+  z-index: 2;
+  white-space: nowrap;
+}
+/* 所有有徽章的卡片，course-header 上方留空間給徽章 */
+.course-card.feature-course .course-header,
+.course-card.bundle-card .course-header,
+.course-card:has(.course-badge) .course-header {
+  padding-top: 56px;
+}
+/* 沒有 .feature-course / .bundle-card 但有 .course-badge 的線上卡片 */
+.course-card[data-course*="線上"] .course-header {
+  padding-top: 56px;
+}
+
+/* RWD：手機版單欄 */
+@media (max-width: 768px) {
+  .course-grid-4 {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .course-grid-4 .course-badge {
+    top: 12px;
+    right: 12px;
+    font-size: 9px;
+    padding: 4px 10px;
+    letter-spacing: 0.15em;
+  }
+  .course-card.feature-course .course-header,
+  .course-card.bundle-card .course-header,
+  .course-card:has(.course-badge) .course-header,
+  .course-card[data-course*="線上"] .course-header {
+    padding-top: 48px;
+  }
+  .course-card .course-header { padding-left: 24px; padding-right: 24px; }
+  .course-card .course-body { padding: 20px 24px; }
+  .course-card .course-footer { padding: 18px 24px 22px; }
+  .modal { padding: 32px 24px 28px; }
+  .modal-header h3 { font-size: 22px; }
+}
+
+/* 中型螢幕：cards 維持 2x2 但稍微縮 padding */
+@media (max-width: 980px) {
+  .course-grid-4 {
+    gap: 20px;
+  }
+  .course-card .course-header { padding: 30px 28px 22px; }
+  .course-card .course-body { padding: 22px 28px; }
+  .course-card .course-footer { padding: 20px 28px 24px; }
+}
+
+/* ============================================
+   應用卡片 CTA 按鈕（取代「整理中」文字）
+   ============================================ */
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--gold);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  transition: all 0.3s var(--t-base);
+  background: rgba(212, 175, 55, 0.04);
+}
+.card-cta svg {
+  transition: transform 0.3s var(--t-base);
+}
+.card-cta:hover {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(212, 175, 55, 0.06));
+  color: var(--gold-soft);
+}
+.card-cta:hover svg {
+  transform: translateX(4px);
+}
+/* card-meta 內已有 dashed 上邊；保留 */
+.service-card .card-meta:has(.card-cta) {
+  justify-content: flex-end;
+}
+
+/* ============================================
+   FIX：service-card 按鈕底部對齊（卡片高度不一時）
+   ============================================ */
+.service-card {
+  display: flex;
+  flex-direction: column;
+}
+.service-card p {
+  flex: 1 1 auto;   /* 描述拉長空間，把 card-meta 推到底 */
+}
+.service-card .card-meta {
+  margin-top: auto;
+}
+
+/* ============================================
+   報名 3 步驟（取代 contact-list）
+   ============================================ */
+.enroll-steps {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.enroll-steps li {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 18px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.enroll-steps li:last-child { border-bottom: none; }
+.es-num {
+  font-family: var(--display);
+  font-size: 15px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  flex-shrink: 0;
+  width: 36px;
+  padding-top: 2px;
+}
+.es-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.es-text strong {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.es-text span {
+  font-size: 13px;
+  color: var(--text-mute);
+  line-height: 1.7;
+}
+
+/* ============================================
+   生日 4 下拉版面（年 / 月 / 日 / 時辰）
+   ============================================ */
+.birth-row {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 0.8fr 1.4fr;
+  gap: 8px;
+}
+.birth-row select {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 13px 12px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13px;
+  transition: all 0.3s var(--t-base);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.5' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 26px;
+  cursor: pointer;
+}
+.birth-row select:focus {
+  outline: none;
+  border-color: var(--gold);
+  background-color: var(--bg-2);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+.field-note {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-mute);
+  letter-spacing: 0.02em;
+  padding: 10px 14px;
+  background: rgba(212, 175, 55, 0.05);
+  border-left: 2px solid var(--line-strong);
+  border-radius: 0 4px 4px 0;
+}
+
+@media (max-width: 540px) {
+  .birth-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
