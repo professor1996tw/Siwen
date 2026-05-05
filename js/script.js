@@ -254,11 +254,10 @@
     });
   });
 
-  // 立即報名 CTA 按鈕（CTA 模式 → 顯示下拉）
-  const ctaBtn = document.getElementById('ctaEnrollBtn');
-  if (ctaBtn) {
-    ctaBtn.addEventListener('click', () => openModal('__CTA__'));
-  }
+  // 立即報名 CTA 按鈕（Hero + Navbar 兩處共用，CTA 模式 → 顯示下拉）
+  document.querySelectorAll('.cta-enroll-btn').forEach((btn) => {
+    btn.addEventListener('click', () => openModal('__CTA__'));
+  });
 
   // 關閉
   if (modal) {
