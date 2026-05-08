@@ -2352,3 +2352,241 @@ body.modal-open { overflow: hidden; }
   .gallery-item figcaption { transform: translateY(0); padding: 8px 10px; font-size: 12px; }
 }
 
+/* ===========================================
+   FENGSHUI STACK · 奇門風水三層空間 (v3.9.2 清廢碼乾淨版)
+   =========================================== */
+.fengshui-stack {}
+
+.fengshui-stack .fs-stack-wrap,
+section.fengshui-stack > .container > .fs-stack-wrap,
+.fs-stack-wrap {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr) !important;
+  grid-template-rows: auto !important;
+  gap: 40px !important;
+  align-items: center !important;
+  margin-top: 56px;
+  width: 100% !important;
+}
+
+/* === 左側 三層疊層容器 === */
+.fs-stack-3d {
+  position: relative;
+  width: 100%;
+}
+
+.fs-image-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1.65;  /* 比較高, 容納分得更開的三層 */
+  margin: 0 auto;
+}
+
+/* 三層 PNG 絕對定位疊放, top 偏移更多讓三層更分離 */
+.fs-layer {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 42%;  /* 略小, 留出 gap */
+  cursor: pointer;
+  transition: transform 0.5s ease,
+              filter 0.5s ease,
+              opacity 0.5s ease;
+  will-change: transform, filter, opacity;
+}
+
+.fs-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 20px rgba(212, 175, 55, 0.18));
+  transition: filter 0.5s ease;
+}
+
+.fs-layer-shop   { top:  0%; z-index: 3; }
+.fs-layer-office { top: 29%; z-index: 2; }
+.fs-layer-home   { top: 58%; z-index: 1; }
+
+/* 樓層標籤 */
+.fs-layer-label {
+  position: absolute;
+  top: 50%;
+  right: -2%;
+  transform: translateY(-50%);
+  font-family: var(--serif, 'Noto Serif TC', serif);
+  color: var(--gold);
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  opacity: 0.5;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  white-space: nowrap;
+  z-index: 5;
+}
+.fs-layer-label::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), rgba(212,175,55,0));
+  margin-right: 6px;
+  transition: width 0.4s ease;
+}
+.fs-label-num {
+  display: block;
+  font-size: 10px;
+  opacity: 0.65;
+  font-family: var(--cinzel, var(--serif));
+  letter-spacing: 0.2em;
+}
+.fs-label-name {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Hover: 該層發光浮起, 其他層暗 */
+.fs-image-wrap:hover .fs-layer {
+  filter: brightness(0.45);
+  opacity: 0.5;
+}
+.fs-image-wrap:hover .fs-layer:hover,
+.fs-image-wrap:hover .fs-layer.is-active,
+.fs-layer.is-active {
+  filter: brightness(1.3) drop-shadow(0 0 28px rgba(212, 175, 55, 0.45));
+  opacity: 1;
+  z-index: 10;
+}
+.fs-layer-shop:hover, .fs-layer-shop.is-active,
+.fs-layer-office:hover, .fs-layer-office.is-active,
+.fs-layer-home:hover, .fs-layer-home.is-active {
+  transform: translateY(-8px) scale(1.03);
+}
+.fs-layer-shop.is-active { transform: translateY(-8px) scale(1.03); }
+
+.fs-layer:hover .fs-layer-label,
+.fs-layer.is-active .fs-layer-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-2px);
+}
+.fs-layer:hover .fs-layer-label::before,
+.fs-layer.is-active .fs-layer-label::before {
+  width: 38px;
+}
+
+.fs-stack-hint {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-soft);
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+}
+
+/* === 右側資訊卡片 === */
+.fs-stack-info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.fs-info-card {
+  position: relative;
+  padding: 18px 22px;
+  background: rgba(20, 20, 28, 0.45);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--gold);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.fs-info-card:hover,
+.fs-info-card.is-active {
+  background: rgba(212, 175, 55, 0.07);
+  border-left-width: 3px;
+  transform: translateX(5px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.1);
+}
+.fs-info-icon {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.fs-info-icon svg { width: 20px; height: 20px; }
+.fs-info-card h3 {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--gold);
+  margin: 0 0 5px;
+  letter-spacing: 0.08em;
+}
+.fs-info-eg {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--text-soft);
+  margin: 0 0 8px;
+  opacity: 0.8;
+}
+.fs-info-card ul { margin: 0; padding: 0; list-style: none; }
+.fs-info-card ul li {
+  position: relative;
+  padding-left: 12px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.fs-info-card ul li::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 1;
+}
+.fs-info-card ul li strong { color: var(--gold); font-weight: 500; }
+
+.fs-stack-cta { margin: 4px 0 0; text-align: center; }
+
+.fs-stack-disclaimer {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-soft);
+  opacity: 0.7;
+  font-family: var(--serif);
+}
+.fs-stack-disclaimer em { font-style: normal; }
+
+/* === RWD: 768 以下變單欄 (手機) === */
+/* 注意: selector 必須 match desktop 規則的 specificity (0,2,2)，不然 !important 也輸 */
+@media (max-width: 768px) {
+  .fengshui-stack .fs-stack-wrap,
+  section.fengshui-stack > .container > .fs-stack-wrap,
+  .fs-stack-wrap {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    margin-top: 40px !important;
+  }
+  .fengshui-stack .fs-image-wrap { max-width: 360px; }
+  .fs-layer-label { right: 4px; font-size: 13px; }
+  .fs-label-name { font-size: 14px; }
+  .fs-layer-label::before { width: 16px; }
+  .fengshui-stack .fs-stack-info { gap: 12px; }
+  .fengshui-stack .fs-info-card { padding: 16px 18px; }
+}
+@media (max-width: 480px) {
+  .fengshui-stack .fs-image-wrap { max-width: 320px; }
+  .fs-layer-label { right: 2px; font-size: 12px; }
+  .fs-label-num { font-size: 9px; }
+  .fs-label-name { font-size: 13px; }
+  .fs-layer-label::before { display: none; }
+}

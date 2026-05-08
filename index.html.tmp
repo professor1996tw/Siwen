@@ -1068,7 +1068,7 @@
         <p class="section-desc">奇門風水不是看通則，是依您的個人本命盤推算「您的空間」最有利的格局。<br/>住家、辦公室、店鋪三種場域，課堂上會帶您一一拆解。</p>
       </div>
 
-      <div class="fs-stack-wrap reveal">
+      <div class="fs-stack-wrap reveal" style="display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,1fr);gap:40px;align-items:center;">
         <!-- 左側：3D 三層軸測 -->
         <div class="fs-stack-3d" aria-label="奇門風水三層空間軸測圖">
           <div class="fs-image-wrap">
@@ -1095,22 +1095,25 @@
               </span>
             </div>
           </div>
+          <div class="fs-stack-hint">
+            <span>● Hover 樓層或右側卡片，看細節</span>
+          </div>
         </div>
 
         <!-- 右側：三層風水佈局文字 -->
         <div class="fs-stack-info">
 
-          <article class="fs-info-card" data-floor="shop">
+          <article class="fs-info-card" data-floor="home">
             <span class="fs-info-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M9 13h6"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-7h6v7"/></svg>
             </span>
-            <h3>商鋪風水</h3>
-            <p class="fs-info-eg">店面選址・收銀位置・客流動線・招牌方位</p>
+            <h3>住家風水</h3>
+            <p class="fs-info-eg">客廳格局・主臥床位・廚房灶口・玄關氣口</p>
             <ul>
-              <li>店面選址前用奇門盤推算「<strong>是否旺您的命格</strong>」</li>
-              <li>收銀台、財位、收納櫃的相對位置影響進財</li>
-              <li>客流動線設計：讓客人「進得來、停得下、買得多」</li>
-              <li>招牌方位、門口朝向、煞氣化解的整合佈局</li>
+              <li>找出您命中的<strong>個人財位</strong>，配合家人盤面綜合定位</li>
+              <li>主臥床位避開「四害」侵擾，提升睡眠與健康</li>
+              <li>玄關氣口、穿堂煞、樑壓床等常見問題化解</li>
+              <li>文昌位定位，協助小孩學業與家人考試運</li>
             </ul>
           </article>
 
@@ -1128,19 +1131,23 @@
             </ul>
           </article>
 
-          <article class="fs-info-card" data-floor="home">
+          <article class="fs-info-card" data-floor="shop">
             <span class="fs-info-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-7h6v7"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M9 13h6"/></svg>
             </span>
-            <h3>住家風水</h3>
-            <p class="fs-info-eg">客廳格局・主臥床位・廚房灶口・玄關氣口</p>
+            <h3>商鋪風水</h3>
+            <p class="fs-info-eg">店面選址・收銀位置・客流動線・招牌方位</p>
             <ul>
-              <li>找出您命中的<strong>個人財位</strong>，配合家人盤面綜合定位</li>
-              <li>主臥床位避開「四害」侵擾，提升睡眠與健康</li>
-              <li>玄關氣口、穿堂煞、樑壓床等常見問題化解</li>
-              <li>文昌位定位，協助小孩學業與家人考試運</li>
+              <li>店面選址前用奇門盤推算「<strong>是否旺您的命格</strong>」</li>
+              <li>收銀台、財位、收納櫃的相對位置影響進財</li>
+              <li>客流動線設計：讓客人「進得來、停得下、買得多」</li>
+              <li>招牌方位、門口朝向、煞氣化解的整合佈局</li>
             </ul>
           </article>
+
+          <p class="fs-stack-cta">
+            <a href="#courses" class="btn btn-mystic">了解奇門課程 →</a>
+          </p>
 
         </div>
       </div>

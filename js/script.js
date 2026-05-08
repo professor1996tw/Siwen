@@ -525,3 +525,47 @@
     });
   }, { passive: true });
 })();
+
+/* ============================================================
+   FENGSHUI STACK 互動 (v3.9 三張 PNG 疊層)
+   - layer ↔ info-card 雙向 hover 綁定
+   - hover 該層 → 該圖亮 + 其他暗
+   - hover 卡片 → 對應層亮 + 其他暗
+   ============================================================ */
+(function() {
+  'use strict';
+  const wrap = document.querySelector('.fs-image-wrap');
+  const layers = document.querySelectorAll('.fs-layer');
+  const cards = document.querySelectorAll('.fs-info-card[data-floor]');
+  if (!layers.length || !cards.length) return;
+
+  function setActive(floor) {
+    layers.forEach(l => {
+      if (l.dataset.floor === floor) l.classList.add('is-active');
+      else l.classList.remove('is-active');
+    });
+    cards.forEach(c => {
+      if (c.dataset.floor === floor) c.classList.add('is-active');
+      else c.classList.remove('is-active');
+    });
+    if (wrap) wrap.classList.add('is-hovering');
+  }
+
+  function clearActive() {
+    layers.forEach(l => l.classList.remove('is-active'));
+    cards.forEach(c => c.classList.remove('is-active'));
+    if (wrap) wrap.classList.remove('is-hovering');
+  }
+
+  // layer 自身 hover
+  layers.forEach(layer => {
+    layer.addEventListener('mouseenter', () => setActive(layer.dataset.floor));
+    layer.addEventListener('mouseleave', clearActive);
+  });
+
+  // card → layer
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => setActive(card.dataset.floor));
+    card.addEventListener('mouseleave', clearActive);
+  });
+})();
