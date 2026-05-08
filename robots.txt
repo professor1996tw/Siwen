@@ -1,0 +1,12 @@
+# 思聞國學 SIWEN ACADEMY
+# robots.txt - 控制搜尋引擎爬蟲行為
+
+User-agent: *
+Allow: /
+Disallow: /backend/
+Disallow: /js/qimen-engine.js
+Disallow: /js/qimen-templates.js
+Disallow: /js/qimen-render.js
+
+# Sitemap 位置
+Sitemap: https://siwen.site/sitemap.xml

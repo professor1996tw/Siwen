@@ -1,0 +1,279 @@
+/* ============================================================
+   思聞國學 · 流年解析區塊樣式 v0.1
+   ============================================================ */
+
+.section.qimen-fortune {
+  background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 100%);
+  position: relative;
+  padding: 100px 0;
+}
+
+.section.qimen-fortune .section-head { text-align: center; margin-bottom: 40px; }
+.section.qimen-fortune .section-label { color: var(--gold); letter-spacing: 0.3em; }
+.section.qimen-fortune .section-title { color: #fff; }
+.section.qimen-fortune .section-desc {
+  color: rgba(255,255,255,0.65);
+  max-width: 640px;
+  margin: 16px auto 0;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+/* 表單 */
+.qm-form-wrap {
+  max-width: 720px;
+  margin: 0 auto 40px;
+  background: var(--bg-3);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 12px;
+  padding: 32px 28px;
+}
+
+.qm-form-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.qm-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.qm-form-field label {
+  font-size: 13px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+
+.qm-form-field input,
+.qm-form-field select {
+  background: var(--bg);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color 0.2s;
+}
+
+.qm-form-field input:focus,
+.qm-form-field select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.qm-form-submit {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: var(--bg);
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.qm-form-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.35);
+}
+
+.qm-form-note {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  margin-top: 14px;
+  letter-spacing: 0.05em;
+}
+
+/* 結果區 */
+#qm-result {
+  display: none;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.qm-chart-meta {
+  background: var(--bg-3);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.9;
+}
+
+.qm-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.qm-meta-row strong {
+  color: var(--gold-soft);
+  font-weight: 500;
+  margin-left: 6px;
+}
+
+.qm-meta-row span:not(:first-child) {
+  color: var(--gold);
+}
+
+/* 九宮 */
+.qm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: var(--bg-3);
+  padding: 6px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  aspect-ratio: 1 / 1;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.qm-cell {
+  background: var(--bg-2);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 6px;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.qm-cell .qm-palace-num {
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.qm-cell .qm-row { line-height: 1.4; }
+.qm-cell .qm-shen { color: var(--gold-soft); font-weight: 600; }
+.qm-cell .qm-gan { font-weight: 700; color: #fff; font-size: 14px; }
+.qm-cell .qm-gan-sep { color: rgba(212,175,55,0.4); margin: 0 4px; }
+.qm-cell .qm-star { color: rgba(255,255,255,0.7); }
+.qm-cell .qm-door { color: var(--gold); }
+.qm-cell .qm-zhi { color: rgba(255,255,255,0.5); font-size: 11px; }
+.qm-cell .qm-sihai {
+  color: #ff8a8a;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 80, 80, 0.12);
+  border-radius: 3px;
+  padding: 2px 4px;
+  margin-top: 4px;
+}
+
+/* 第一用神（黃底） */
+.qm-cell.qm-yongshen-1 {
+  background: linear-gradient(135deg, rgba(245, 217, 112, 0.18), rgba(212, 175, 55, 0.10));
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.25) inset;
+}
+
+/* 第二用神（綠底） */
+.qm-cell.qm-yongshen-2 {
+  background: linear-gradient(135deg, rgba(120, 200, 130, 0.18), rgba(80, 160, 100, 0.10));
+  border-color: rgba(120, 200, 130, 0.6);
+  box-shadow: 0 0 20px rgba(120, 200, 130, 0.20) inset;
+}
+
+/* 中宮 */
+.qm-cell.qm-center {
+  background: var(--bg-3);
+  border-color: rgba(212, 175, 55, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qm-cell.qm-center .qm-palace-name {
+  font-size: 22px;
+  color: var(--gold);
+  font-family: 'Noto Serif TC', serif;
+  letter-spacing: 0.2em;
+}
+
+/* 解析區塊 */
+.qm-analysis { padding: 0 8px; }
+
+.qm-section {
+  background: var(--bg-3);
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  padding: 24px 28px;
+  margin-bottom: 16px;
+}
+
+.qm-section-title {
+  color: var(--gold);
+  font-family: 'Noto Serif TC', serif;
+  font-size: 18px;
+  letter-spacing: 0.15em;
+  margin: 0 0 12px;
+}
+
+.qm-section-body {
+  color: rgba(255,255,255,0.85);
+  font-size: 15px;
+  line-height: 1.95;
+}
+
+.qm-section-body strong {
+  color: var(--gold-soft);
+  font-weight: 600;
+}
+
+.qm-section-body em {
+  color: var(--gold);
+  font-style: normal;
+}
+
+.qm-section-body .cta-line {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(212, 175, 55, 0.3);
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.qm-section-body .disclaimer {
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.05em;
+}
+
+/* RWD */
+@media (max-width: 768px) {
+  .qm-form-row { grid-template-columns: repeat(2, 1fr); }
+  .qm-grid { font-size: 11px; }
+  .qm-cell { padding: 8px 4px; gap: 2px; }
+  .qm-cell .qm-gan { font-size: 12px; }
+  .qm-meta-row { gap: 12px; font-size: 13px; }
+}
+@media (max-width: 480px) {
+  .qm-form-row { grid-template-columns: 1fr 1fr; }
+  .qm-cell .qm-shen { font-size: 11px; }
+}

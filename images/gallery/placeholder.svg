@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 540">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a22"/>
+      <stop offset="100%" stop-color="#0a0a0f"/>
+    </linearGradient>
+  </defs>
+  <rect width="540" height="540" fill="url(#bg)"/>
+  <rect x="10" y="10" width="520" height="520" fill="none" stroke="#d4af37" stroke-width="1" stroke-dasharray="6,6" opacity="0.5"/>
+  <g fill="#d4af37" text-anchor="middle">
+    <text x="270" y="265" font-family="serif" font-size="28" letter-spacing="0.2em">SIWEN</text>
+    <text x="270" y="310" font-family="serif" font-size="18" opacity="0.7">照片即將上傳</text>
+  </g>
+</svg>

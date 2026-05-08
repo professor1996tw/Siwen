@@ -193,6 +193,52 @@ ul { list-style: none; }
   color: var(--gold);
   background: rgba(212, 175, 55, 0.06);
 }
+
+/* ===== .btn-mystic：奇門本命解析專用 (v3 新增) ===== */
+/* 視覺份量介於 ghost 與 primary 之間, 金邊+流光描邊+八卦光暈 hover */
+.btn-mystic {
+  position: relative;
+  background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.02) 100%);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-mystic::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(212,175,55,0.18) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.8s ease;
+  z-index: -1;
+}
+.btn-mystic:hover {
+  color: #0a0a0f;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  box-shadow: 0 0 0 1px var(--gold), 0 0 16px rgba(212, 175, 55, 0.45), 0 0 32px rgba(212, 175, 55, 0.18);
+  transform: translateY(-1px);
+}
+.btn-mystic:hover::before {
+  transform: translateX(100%);
+}
+
+/* nav-cta-group: 包覆兩顆按鈕用 */
+.nav-cta-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 16px;
+}
+.nav-cta-group .nav-cta {
+  margin-left: 0;
+}
+.nav-cta-secondary {
+  padding: 10px 22px !important;
+  font-size: 13px !important;
+}
+.nav-mobile-cta { display: none; }
+
 .btn-block { width: 100%; padding: 16px; }
 
 /* ===========================================
@@ -1048,8 +1094,16 @@ ul { list-style: none; }
     border-bottom: 1px solid var(--line);
     width: 100%;
   }
+  .nav-cta-group { display: none; }
   .nav-cta { display: none; }
   .nav-toggle { display: flex; }
+  .nav-mobile-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 24px 24px;
+    border-top: 1px solid var(--line);
+  }
 
   .section { padding: 80px 0; }
   .section-head { margin-bottom: 50px; }
@@ -1953,3 +2007,348 @@ body.modal-open { overflow: hidden; }
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* ===========================================
+   GALLERY · 教學足跡照片牆 (v3 新增)
+   =========================================== */
+.gallery-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 32px 0 40px;
+}
+.gallery-tab {
+  background: transparent;
+  color: var(--text-soft);
+  border: 1px solid var(--line-strong);
+  padding: 10px 24px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s var(--t-base);
+  letter-spacing: 0.05em;
+}
+.gallery-tab:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.gallery-tab.is-active {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: #0a0a0f;
+  border-color: var(--gold);
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+.gallery-item {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 0.4s var(--t-base);
+}
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.gallery-item figcaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 12px 14px;
+  background: linear-gradient(0deg, rgba(0,0,0,0.85), rgba(0,0,0,0));
+  color: var(--gold);
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  transform: translateY(100%);
+  transition: transform 0.4s var(--t-base);
+}
+.gallery-item figcaption small {
+  display: block;
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+.gallery-item:hover {
+  border-color: var(--gold);
+  transform: scale(1.03);
+  box-shadow: 0 8px 32px rgba(212, 175, 55, 0.32);
+}
+.gallery-item:hover img {
+  transform: scale(1.06);
+}
+.gallery-item:hover figcaption {
+  transform: translateY(0);
+}
+.gallery-item.is-hidden {
+  display: none;
+}
+
+/* Lightbox */
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 40px;
+  cursor: zoom-out;
+}
+.gallery-lightbox.is-open { display: flex; }
+.gallery-lightbox img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 64px rgba(212, 175, 55, 0.32);
+}
+.gallery-lightbox-caption {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--gold);
+  font-family: var(--serif);
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+.gallery-lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  background: none;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.gallery-lightbox-close:hover {
+  background: var(--gold);
+  color: #0a0a0f;
+}
+
+
+/* ===========================================
+   BENEFITS · 學會的好處 (v3.1 新增)
+   小設計: 角落金線勾邊 + 序號 + hover 抬升
+   =========================================== */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.benefit-card {
+  position: relative;
+  padding: 36px 28px 32px;
+  background: linear-gradient(180deg, var(--bg-2) 0%, rgba(20,20,28,0.6) 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: all 0.4s var(--t-base);
+  overflow: hidden;
+}
+.benefit-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s var(--t-base);
+}
+.benefit-corner {
+  position: absolute;
+  top: 0; right: 0;
+  width: 40px;
+  height: 40px;
+  color: var(--gold);
+  opacity: 0.5;
+  transition: opacity 0.4s var(--t-base);
+}
+.benefit-corner svg {
+  width: 100%;
+  height: 100%;
+}
+.benefit-num {
+  display: inline-block;
+  font-family: var(--cinzel, var(--serif));
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 18px;
+}
+.benefit-card h3 {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 8px;
+  letter-spacing: 0.05em;
+}
+.benefit-card .benefit-sub {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--gold);
+  margin: 0 0 16px;
+  letter-spacing: 0.08em;
+}
+.benefit-card .benefit-body {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--text-soft);
+  margin: 0;
+}
+.benefit-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.15);
+}
+.benefit-card:hover::before {
+  opacity: 1;
+}
+.benefit-card:hover .benefit-corner {
+  opacity: 1;
+}
+.benefit-card:hover h3 {
+  color: var(--gold);
+}
+
+.benefits-footnote {
+  margin-top: 48px;
+  padding: 24px;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--text-soft);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.benefits-footnote em {
+  font-style: normal;
+  letter-spacing: 0.05em;
+}
+
+
+/* === Benefits Applications Detail (v3.2) === */
+.benefits-applications {
+  margin-top: 56px;
+  padding-top: 56px;
+  border-top: 1px solid var(--line);
+}
+.benefits-app-head {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.benefits-app-label {
+  display: inline-block;
+  font-family: var(--cinzel, var(--serif));
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+.benefits-app-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+.benefits-app-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.app-detail-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 26px 28px;
+  background: rgba(20, 20, 28, 0.4);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--gold);
+  border-radius: 4px;
+  transition: all 0.3s var(--t-base);
+}
+.app-detail-card:hover {
+  background: rgba(212, 175, 55, 0.04);
+  border-left-width: 3px;
+  transform: translateX(4px);
+}
+.app-icon {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.app-icon svg {
+  width: 28px;
+  height: 28px;
+}
+.app-detail-card h4 {
+  font-family: var(--serif);
+  font-size: 19px;
+  color: var(--gold);
+  margin: 0;
+  letter-spacing: 0.08em;
+}
+.app-detail-card .app-detail-eg {
+  font-size: 13px;
+  color: var(--text-soft);
+  font-style: italic;
+  margin: 0 0 4px;
+  opacity: 0.85;
+}
+.app-detail-card .app-detail-body {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text);
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .benefits-app-grid { grid-template-columns: 1fr; }
+  .benefits-app-title { font-size: 22px; }
+}
+
+/* RWD - Gallery / Benefits */
+@media (max-width: 1024px) {
+  .gallery-grid { grid-template-columns: repeat(4, 1fr); }
+  .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .benefits-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 540px) {
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-item figcaption { transform: translateY(0); padding: 8px 10px; font-size: 12px; }
+}
+

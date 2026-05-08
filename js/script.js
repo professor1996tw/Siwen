@@ -337,3 +337,191 @@
     tick();
   }
 })();
+
+/* ============================================================
+   GALLERY · 教學足跡照片牆 (v3 新增)
+   ============================================================ */
+(function() {
+  'use strict';
+  const tabs = document.querySelectorAll('.gallery-tab');
+  const items = document.querySelectorAll('.gallery-item');
+  if (!tabs.length || !items.length) return;
+
+  // Tab 切換
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => {
+        t.classList.remove('is-active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected', 'true');
+      const filter = tab.dataset.filter;
+      items.forEach(item => {
+        if (filter === 'all' || item.dataset.category === filter) {
+          item.classList.remove('is-hidden');
+        } else {
+          item.classList.add('is-hidden');
+        }
+      });
+    });
+  });
+
+  // Lightbox
+  let lightbox = document.querySelector('.gallery-lightbox');
+  if (!lightbox) {
+    lightbox = document.createElement('div');
+    lightbox.className = 'gallery-lightbox';
+    lightbox.innerHTML = `
+      <button class="gallery-lightbox-close" aria-label="關閉">×</button>
+      <img alt="" />
+      <div class="gallery-lightbox-caption"></div>
+    `;
+    document.body.appendChild(lightbox);
+  }
+  const lbImg = lightbox.querySelector('img');
+  const lbCap = lightbox.querySelector('.gallery-lightbox-caption');
+  const lbClose = lightbox.querySelector('.gallery-lightbox-close');
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const img = item.querySelector('img');
+      const cap = item.querySelector('figcaption');
+      if (!img) return;
+      lbImg.src = img.src;
+      lbImg.alt = img.alt || '';
+      lbCap.textContent = cap ? cap.textContent.trim() : '';
+      lightbox.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeLb() {
+    lightbox.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+  lightbox.addEventListener('click', e => {
+    if (e.target === lightbox || e.target === lbImg.parentNode) closeLb();
+  });
+  lbClose.addEventListener('click', closeLb);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLb();
+  });
+})();
+
+/* ============================================================
+   GA4 EVENT TRACKING (v3.6 新增)
+   一頁式網站行為追蹤：nav 點擊 / section view / CTA / 表單提交
+   ============================================================ */
+(function() {
+  'use strict';
+  // 沒有 gtag 就跳過（例：本地測試或 GA 未啟用）
+  if (typeof gtag !== 'function') return;
+
+  // ---------- 1. NAV 點擊事件 ----------
+  document.querySelectorAll('.nav-links a, .nav-mobile-cta a, .nav-mobile-cta button').forEach(el => {
+    el.addEventListener('click', () => {
+      const label = (el.getAttribute('href') || '').replace('#', '') || el.textContent.trim();
+      gtag('event', 'nav_click', {
+        event_category: 'navigation',
+        event_label: label,
+        link_text: el.textContent.trim()
+      });
+    });
+  });
+
+  // ---------- 2. SECTION VIEW 事件（IntersectionObserver） ----------
+  const seenSections = new Set();
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.4 && !seenSections.has(entry.target.id)) {
+        seenSections.add(entry.target.id);
+        gtag('event', 'section_view', {
+          event_category: 'engagement',
+          event_label: entry.target.id || entry.target.className,
+          section_name: entry.target.id
+        });
+      }
+    });
+  }, { threshold: [0.4] });
+  document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
+
+  // ---------- 3. CTA 按鈕點擊 ----------
+  document.querySelectorAll('.btn-primary, .btn-mystic, .cta-enroll-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      let label = 'unknown';
+      if (btn.classList.contains('cta-enroll-btn')) label = 'enroll';
+      else if (btn.classList.contains('btn-mystic')) label = 'birthchart';
+      else if (btn.classList.contains('btn-primary')) label = 'primary';
+      gtag('event', 'cta_click', {
+        event_category: 'conversion',
+        event_label: label,
+        button_text: btn.textContent.trim().substring(0, 30)
+      });
+    });
+  });
+
+  // ---------- 4. 表單提交 ----------
+  // 4a. 本命解析表單
+  const qmForm = document.getElementById('qm-form');
+  if (qmForm) {
+    qmForm.addEventListener('submit', () => {
+      gtag('event', 'birthchart_submit', {
+        event_category: 'conversion',
+        event_label: 'qimen_birthchart'
+      });
+    });
+  }
+  // 4b. 報名表
+  const cf = document.getElementById('cf-form') || document.querySelector('form[action*="apply"], form[action*="form"]');
+  document.querySelectorAll('form').forEach(form => {
+    if (form.id === 'qm-form') return; // 上面已處理
+    form.addEventListener('submit', () => {
+      const formId = form.id || 'unknown_form';
+      gtag('event', 'form_submit', {
+        event_category: 'conversion',
+        event_label: formId
+      });
+    });
+  });
+
+  // ---------- 5. Gallery 圖片點擊 ----------
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const cap = item.querySelector('figcaption');
+      gtag('event', 'gallery_open', {
+        event_category: 'engagement',
+        event_label: cap ? cap.textContent.trim() : 'unknown'
+      });
+    });
+  });
+
+  // ---------- 6. FAQ 展開 ----------
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('toggle', () => {
+      if (item.open) {
+        const summary = item.querySelector('summary');
+        gtag('event', 'faq_open', {
+          event_category: 'engagement',
+          event_label: summary ? summary.textContent.trim().substring(0, 50) : 'unknown'
+        });
+      }
+    });
+  });
+
+  // ---------- 7. 滾動深度（25/50/75/100%） ----------
+  const scrollMilestones = { 25: false, 50: false, 75: false, 100: false };
+  window.addEventListener('scroll', () => {
+    const scrollPct = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+    [25, 50, 75, 100].forEach(milestone => {
+      if (scrollPct >= milestone && !scrollMilestones[milestone]) {
+        scrollMilestones[milestone] = true;
+        gtag('event', 'scroll_depth', {
+          event_category: 'engagement',
+          event_label: milestone + '%',
+          scroll_pct: milestone
+        });
+      }
+    });
+  }, { passive: true });
+})();
