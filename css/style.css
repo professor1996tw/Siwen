@@ -2590,3 +2590,158 @@ section.fengshui-stack > .container > .fs-stack-wrap,
   .fs-label-name { font-size: 13px; }
   .fs-layer-label::before { display: none; }
 }
+
+/* ============================================================
+   BIRTHCHART 頁專用樣式 (v3.10)
+   ============================================================ */
+
+/* === HERO 工具頁簡化版 === */
+.hero.hero-tool { min-height: 50vh; padding: 100px 0 60px; }
+.hero-inner-tool {
+  max-width: 820px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.hero-inner-tool .hero-title { font-size: 38px; line-height: 1.4; }
+.hero-inner-tool .hero-sub { max-width: 720px; margin: 20px auto 0; font-size: 15px; }
+.hero-tool-hint {
+  margin-top: 28px;
+  color: var(--gold, #d4af37);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+}
+@media (max-width: 768px) {
+  .hero-inner-tool .hero-title { font-size: 28px; }
+  .hero.hero-tool { min-height: auto; padding: 80px 0 40px; }
+}
+
+/* === SEO 內容堆疊：常見問題卡片 === */
+.qimen-explain { padding-top: 60px; padding-bottom: 60px; }
+.qm-explain-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 32px;
+}
+.qm-explain-card {
+  background: rgba(20, 20, 28, 0.45);
+  border: 1px solid var(--line, rgba(255,255,255,0.08));
+  border-left: 3px solid var(--gold, #d4af37);
+  padding: 24px 28px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+.qm-explain-card:hover { background: rgba(212, 175, 55, 0.05); }
+.qm-explain-card h3 {
+  color: var(--gold, #d4af37);
+  font-family: var(--serif, 'Noto Serif TC', serif);
+  font-size: 17px;
+  margin: 0 0 12px;
+  letter-spacing: 0.05em;
+}
+.qm-explain-card p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text, #e8e8e8);
+  margin: 0;
+}
+.qm-explain-card a {
+  color: var(--gold, #d4af37);
+  border-bottom: 1px solid currentColor;
+  text-decoration: none;
+}
+@media (max-width: 768px) {
+  .qm-explain-grid { grid-template-columns: 1fr; gap: 16px; }
+  .qm-explain-card { padding: 20px 22px; }
+}
+
+/* === 雙 CTA === */
+.dual-cta-section { padding: 80px 0; }
+.dual-cta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  margin-top: 40px;
+}
+.dual-cta-card {
+  display: block;
+  padding: 36px 32px;
+  background: rgba(20, 20, 28, 0.45);
+  border: 1px solid var(--line, rgba(255,255,255,0.08));
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text, #e8e8e8);
+  transition: all 0.35s ease;
+  position: relative;
+}
+.dual-cta-card:hover {
+  background: rgba(212, 175, 55, 0.07);
+  border-color: var(--gold, #d4af37);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(212, 175, 55, 0.18);
+}
+.dual-cta-card-primary {
+  border: 1px solid var(--gold, #d4af37);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.10), rgba(212, 175, 55, 0.02));
+}
+.dual-cta-icon {
+  display: inline-flex;
+  width: 52px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--gold, #d4af37);
+  color: var(--gold, #d4af37);
+  margin-bottom: 18px;
+}
+.dual-cta-card h3 {
+  font-family: var(--serif, 'Noto Serif TC', serif);
+  font-size: 20px;
+  color: var(--gold, #d4af37);
+  margin: 0 0 14px;
+  letter-spacing: 0.05em;
+}
+.dual-cta-card p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-soft, #a8a8a8);
+  margin: 0 0 24px;
+}
+.dual-cta-arrow {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold, #d4af37);
+  letter-spacing: 0.08em;
+  transition: transform 0.3s ease;
+}
+.dual-cta-card:hover .dual-cta-arrow { transform: translateX(6px); }
+.dual-cta-disclaimer {
+  margin-top: 36px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-soft, #a8a8a8);
+  opacity: 0.7;
+  font-family: var(--serif, 'Noto Serif TC', serif);
+  font-style: italic;
+}
+@media (max-width: 768px) {
+  .dual-cta-grid { grid-template-columns: 1fr; gap: 20px; }
+  .dual-cta-section { padding: 60px 0; }
+  .dual-cta-card { padding: 28px 24px; }
+}
+
+/* === nav 上「奇門本命解析」按鈕 active 狀態（在工具頁顯示）=== */
+.nav-cta-secondary.active,
+.nav-mobile-cta a.active {
+  background: var(--gold, #d4af37) !important;
+  color: var(--bg, #0a0a0f) !important;
+  border-color: var(--gold, #d4af37) !important;
+}
+
+/* === birthchart 頁的 #qm-form 表單上方留 padding 讓 scroll-to 不卡 nav === */
+body.birthchart-page #qm-form { scroll-margin-top: 100px; }
