@@ -658,54 +658,59 @@ const QimenEngine = (function() {
   }
 
   // ========================================================
-  // 九、四害計算 (v2.8 按講義 P17-18 修正)
+  // 九、四害計算 (v3.0 按思聞教科書圖示最終版)
   //   空亡: 該宮地支屬時柱旬空
-  //   入墓: sky 干入墓在該宮地支 (muMap 修正: 癸→未)
-  //   擊刑: 標準十二地支刑 — 該宮地支與時支相刑
-  //         子卯刑、寅巳申三刑、丑戌未三刑、辰午酉亥自刑
-  //   門迫: 門 五行 剋 宮 五行
+  //   擊刑: 特定宮 + 特定天干 (sky 或 earth 任一觸發)
+  //         巽4=壬癸, 離9=辛, 坤2=己, 震3=戊, 艮8=庚
+  //   入墓: 特定宮 + 特定天干 (sky 或 earth 任一觸發)
+  //         巽4=辛壬(辰), 坤2=癸(未), 艮8=丁己庚(丑), 乾6=乙丙戊(戌)
+  //   門迫: 門五行 剋 宮五行 (門剋宮 → 門被宮位限制 = 門迫)
   // ========================================================
-  // 十二地支刑: key = 該地支會刑哪些地支
-  const XING_PARTNER = {
-    '子': ['卯'],
-    '卯': ['子'],
-    '寅': ['巳','申'],
-    '巳': ['寅','申'],
-    '申': ['寅','巳'],
-    '丑': ['戌','未'],
-    '戌': ['丑','未'],
-    '未': ['丑','戌'],
-    '辰': ['辰'],   // 自刑
-    '午': ['午'],   // 自刑
-    '酉': ['酉'],   // 自刑
-    '亥': ['亥']    // 自刑
+
+  // 擊刑表 (思聞教科書圖示)
+  const JIXING_TABLE = {
+    4: ['壬', '癸'],
+    9: ['辛'],
+    2: ['己'],
+    3: ['戊'],
+    8: ['庚']
   };
-  function calculateSiHai(palaceNum, palace, hourZhi, hourGanZhi, dayGanZhi, doors, skyGans) {
+
+  // 入墓表 (思聞教科書圖示)
+  const RUMU_TABLE = {
+    4: ['辛', '壬'],
+    2: ['癸'],
+    8: ['丁', '己', '庚'],
+    6: ['乙', '丙', '戊']
+  };
+
+  function calculateSiHai(palaceNum, palace, hourZhi, hourGanZhi, dayGanZhi, doors, skyGans, earthGans) {
     const sihai = [];
     const xun = getXunOfGanZhi(hourGanZhi);
     const kongZhi = XUN_KONG[xun] || [];
+
+    // 空亡: 該宮地支屬時柱旬空
     if (palace.zhi.some(z => kongZhi.includes(z))) sihai.push('空亡');
 
-    // 入墓: sky 干入墓在該宮地支
-    const muMap = { '甲':'未','乙':'戌','丙':'戌','丁':'丑','戊':'戌','己':'丑','庚':'丑','辛':'辰','壬':'辰','癸':'未' };
-    const skyList = skyGans || [];
-    let inMu = false;
-    for (const g of skyList) {
-      const muZhi = muMap[g];
-      if (muZhi && palace.zhi.includes(muZhi)) { inMu = true; break; }
-    }
-    if (inMu) sihai.push('入墓');
+    // 收集該宮所有天干 (sky + earth, 兩盤皆計入)
+    const allGans = new Set([...(skyGans || []), ...(earthGans || [])]);
 
-    // 擊刑: 該宮地支與時支相刑 (十二地支標準刑)
-    const isJixing = palace.zhi.some(z => (XING_PARTNER[z] || []).includes(hourZhi));
-    if (isJixing) sihai.push('擊刑');
+    // 入墓: 特定宮 + 特定天干
+    const rumuGans = RUMU_TABLE[palaceNum] || [];
+    if (rumuGans.some(g => allGans.has(g))) sihai.push('入墓');
 
-    // 門迫: 門 五行 剋 宮 五行 → 門入死地
+    // 擊刑: 特定宮 + 特定天干
+    const jixingGans = JIXING_TABLE[palaceNum] || [];
+    if (jixingGans.some(g => allGans.has(g))) sihai.push('擊刑');
+
+    // 門迫: 門五行 剋 宮五行
     const door = doors[palaceNum];
     const doorWuxing = { '休':'水','生':'土','伤':'木','杜':'木','景':'火','死':'土','惊':'金','開':'金' };
     const palaceWuxing = { 1:'水', 2:'土', 3:'木', 4:'木', 6:'金', 7:'金', 8:'土', 9:'火' };
     const ke = { '木':'土','土':'水','水':'火','火':'金','金':'木' };
-    if (door && palaceWuxing[palaceNum] && ke[doorWuxing[door]] === palaceWuxing[palaceNum]) sihai.push('門迫');
+    if (door && palaceWuxing[palaceNum] && ke[doorWuxing[door]] === palaceWuxing[palaceNum]) {
+      sihai.push('門迫');
+    }
     return sihai;
   }
 
@@ -793,7 +798,7 @@ const QimenEngine = (function() {
     const palaces = PALACES.filter(p => p.num !== 5).map(p => {
       const earthGans = earthByPalace[p.num] || [];
       const skyGans = skyByPalace[p.num] || [];
-      const sihai = calculateSiHai(p.num, p, hourZhi, hourGanZhi, dayGanZhi, doorsByPalace, skyGans);
+      const sihai = calculateSiHai(p.num, p, hourZhi, hourGanZhi, dayGanZhi, doorsByPalace, skyGans, earthGans);
       return {
         num: p.num, name: p.name, dir: p.dir, zhi: p.zhi,
         shen: shen[p.num] || '',
