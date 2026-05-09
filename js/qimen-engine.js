@@ -585,10 +585,19 @@ const QimenEngine = (function() {
   }
 
   // ========================================================
-  // 八、排八門 (Step 5)
-  // 值使門 = 值符星本位門 (天禽→死, 同芮)
-  // 從 該門本位宮 走 (時柱-旬首) 步 (陽順陰逆 numerical), 落中5寄2.
-  // 從 該位置 順轉 DOOR_PALACE_ORDER 排 8 門.
+  // 八、排八門 (Step 5)  v2.9 教科書最終版
+  //
+  // 規則 (老闆 PDF + 講義 + a8899 對齊):
+  //   1. 值使門 = 值符星本位門 (STAR_TO_DOOR)
+  //   2. 起點 gan = 值符星本位宮的 earth 干 (本位, 非 5 寄)
+  //   3. N = 時柱在旬內第幾位 (1-indexed, 旬首為 1, 包含起點)
+  //   4. 從 startGan 按 SANJI 順序「戊己庚辛壬癸丁丙乙」走 N-1 步 (因為 N=1 不動)
+  //      = 等價於落點 = SANJI[(startIdx + N - 1) % 9]
+  //   5. 落點 gan 在 earth 的位置 = 落點宮 endPalace (5 寄 2)
+  //   6. 將「值使門」放在 endPalace, 從該宮按 STAR_PALACE_ORDER 順時針排
+  //      其他七門, 對應 DOOR_ORDER 的順序 cycle
+  //
+  // 重要: 不論陽遁陰遁, 排門步驟一律順時針 (陽順陰逆已在地盤干體現)
   // ========================================================
   const STAR_TO_DOOR = {
     '天蓬':'休', '天芮':'死', '天冲':'伤', '天輔':'杜',
@@ -600,14 +609,6 @@ const QimenEngine = (function() {
   };
 
   function arrangeDoors(zhifuStar, dunType, hourGanZhi, hourXun, earthRawBoard) {
-    // v2.7 教科書 SANJI walk:
-    //   1. 值使門 = 值符星本位門
-    //   2. 起點 gan = 值使門本位宮的 earth 干 (本位, 非 5 寄 entry)
-    //   3. 走 N-1 步 in SANJI 戊己庚辛壬癸丁丙乙 forward (N = 時柱在旬內第幾位)
-    //   4. 落點 gan 在 earth 的位置 = 落點宮 (5 寄 2 處理)
-    //   5. 排門:
-    //      落點 = 值使門本位 → 全本位 (DOOR_BY_PALACE)
-    //      落點 ≠ 值使門本位 → 休門 at 落點, forward cycle DOOR_ORDER
     const zhishiDoor = STAR_TO_DOOR[zhifuStar];
     const home = DOOR_TO_HOME_PALACE[zhishiDoor];
     const result = {};
@@ -616,45 +617,44 @@ const QimenEngine = (function() {
       return { byPalace: {}, zhishiDoor, steps: 0, zhishiPalace: null };
     }
 
+    // 起點 gan = 值符星本位的 earth 干 (本位, 非 5 寄)
     const startGan = earthRawBoard[home];
     const startIdx = SANJI_LIUYI.indexOf(startGan);
+    if (startIdx < 0) {
+      return { byPalace: {}, zhishiDoor, steps: 0, zhishiPalace: null };
+    }
 
-    // N = 時柱在旬內第幾位 (1-indexed, 旬首為 1)
+    // N = 時柱在旬內第幾位 (1-indexed)
     const xunIdx = GANZHI.indexOf(hourXun);
     const hourIdx = GANZHI.indexOf(hourGanZhi);
     const N = hourIdx - xunIdx + 1;
 
-    // walk N-1 steps in SANJI cycle (9 gans)
+    // 走 N-1 步 (N=1 不動, N=5 走 4 步)
     const endIdx = ((startIdx + N - 1) % 9 + 9) % 9;
     const endGan = SANJI_LIUYI[endIdx];
 
-    // 落點 = 落點 gan 在 earth 的位置 (display, 5寄2)
+    // 落點 gan 在 earth 的位置 (5 寄 2)
     let endPalaceRaw = null;
     for (const [num, gan] of Object.entries(earthRawBoard)) {
       if (gan === endGan) { endPalaceRaw = parseInt(num); break; }
     }
     const endPalace = (endPalaceRaw === 5) ? 2 : endPalaceRaw;
 
-    if (endPalace === home) {
-      // 全本位
-      for (const [num, door] of Object.entries(DOOR_BY_PALACE)) {
-        result[parseInt(num)] = door;
-      }
-      return { byPalace: result, zhishiDoor, steps: N - 1, zhishiPalace: home };
-    }
-
-    // 休門 at 落點, forward cycle DOOR_ORDER
+    // 從 endPalace 按 STAR_PALACE_ORDER 順時針排,
+    // 第一宮 = 值使門 (zhishiDoor), 其餘按 DOOR_ORDER cycle
     const palStartIdx = STAR_PALACE_ORDER.indexOf(endPalace);
-    if (palStartIdx < 0) return { byPalace: {}, zhishiDoor, steps: N - 1, zhishiPalace: null };
+    if (palStartIdx < 0) {
+      return { byPalace: {}, zhishiDoor, steps: N - 1, zhishiPalace: null };
+    }
+    const zhishiIdx = DOOR_ORDER.indexOf(zhishiDoor);
+    if (zhishiIdx < 0) {
+      return { byPalace: {}, zhishiDoor, steps: N - 1, zhishiPalace: null };
+    }
     for (let i = 0; i < 8; i++) {
       const pal = STAR_PALACE_ORDER[(palStartIdx + i) % 8];
-      result[pal] = DOOR_ORDER[i];
+      result[pal] = DOOR_ORDER[(zhishiIdx + i) % 8];
     }
-    const zhishiDoorIdx = DOOR_ORDER.indexOf(zhishiDoor);
-    const zhishiPalace = zhishiDoorIdx >= 0
-      ? STAR_PALACE_ORDER[(palStartIdx + zhishiDoorIdx) % 8]
-      : null;
-    return { byPalace: result, zhishiDoor, steps: N - 1, zhishiPalace };
+    return { byPalace: result, zhishiDoor, steps: N - 1, zhishiPalace: endPalace };
   }
 
   // ========================================================
