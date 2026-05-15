@@ -5,6 +5,9 @@
 (function () {
   'use strict';
 
+  // ---------- PressPlay 線上課程 URL (上架後替換) ----------
+  const PRESSPLAY_URL = '#'; // TODO: PressPlay 課程上線後替換為真實 URL
+
   // ---------- Navbar scroll effect ----------
   const navbar = document.getElementById('navbar');
   const onScroll = () => {
@@ -154,6 +157,14 @@
   const courseSelect = document.getElementById('cf-course');
   const courseField = document.getElementById('cf-course-field');
   const courseHint = document.getElementById('course-consult-hint');
+  const ppBlock = document.getElementById('press-play-block');
+  const formRest = document.getElementById('cf-form-rest');
+
+  // 切換 modal 內 PressPlay 模式：選「線上課程」時隱藏表單、顯示 PressPlay 卡片
+  const togglePressPlayMode = (isOnline) => {
+    if (ppBlock) ppBlock.hidden = !isOnline;
+    if (formRest) formRest.hidden = isOnline;
+  };
 
   // 動態調整「上課地」：線上課程自動填線上，其他課程只給實體地點
   const updateLocationOptions = (courseName) => {
@@ -185,6 +196,8 @@
     if (!modal) return;
     const isFromCTA = courseName === '__CTA__';
     if (courseHint) courseHint.style.display = 'none';
+    // 每次開 modal 都重置 PressPlay 模式
+    togglePressPlayMode(false);
 
     if (isFromCTA) {
       // 立即報名 CTA：顯示課程下拉、清空選擇
@@ -225,11 +238,19 @@
     document.body.classList.remove('modal-open');
   };
 
-  // 課程下拉變動：同步更新 modal 標題顯示 + location 選項 + 諮詢提示
+  // 課程下拉變動：同步更新 modal 標題顯示 + location 選項 + 諮詢提示 + PressPlay 切換
   if (courseSelect) {
     courseSelect.addEventListener('change', (e) => {
       const value = e.target.value;
-      if (value === '還在比較 / 想諮詢') {
+      const isOnline = value.includes('線上課程');
+      togglePressPlayMode(isOnline);
+
+      if (isOnline) {
+        // 線上課程：顯示 PressPlay 卡片，隱藏表單其他欄位
+        if (courseHint) courseHint.style.display = 'none';
+        if (modalCourseName) modalCourseName.textContent = '線上課程・前往 PressPlay';
+        updateLocationOptions('');
+      } else if (value === '還在比較 / 想諮詢') {
         if (courseHint) courseHint.style.display = 'block';
         if (modalCourseName) modalCourseName.textContent = '還在比較 / 想諮詢';
         updateLocationOptions('');
@@ -257,6 +278,21 @@
   // 立即報名 CTA 按鈕（Hero + Navbar 兩處共用，CTA 模式 → 顯示下拉）
   document.querySelectorAll('.cta-enroll-btn').forEach((btn) => {
     btn.addEventListener('click', () => openModal('__CTA__'));
+  });
+
+  // PressPlay 連結初始化（兩處：modal 內 CTA、課程卡片「立即訂閱」）
+  // + GA 事件：每次點擊送 click_pressplay event
+  document.querySelectorAll('#course-online-link, #pp-cta').forEach((el) => {
+    el.href = PRESSPLAY_URL;
+    el.addEventListener('click', () => {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'click_pressplay', {
+          event_category: 'engagement',
+          event_label: el.id === 'pp-cta' ? 'modal_pressplay_cta' : 'course_card_subscribe',
+          link_url: PRESSPLAY_URL
+        });
+      }
+    });
   });
 
   // 關閉

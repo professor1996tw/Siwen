@@ -2745,3 +2745,61 @@ section.fengshui-stack > .container > .fs-stack-wrap,
 
 /* === birthchart 頁的 #qm-form 表單上方留 padding 讓 scroll-to 不卡 nav === */
 body.birthchart-page #qm-form { scroll-margin-top: 100px; }
+
+/* ============================================================
+   PressPlay 線上課程卡片 (v4 modal 內，選「線上課程」時顯示)
+   ============================================================ */
+#press-play-block {
+  margin-top: 18px;
+}
+.pp-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(20, 20, 28, 0.55);
+  border: 1px solid var(--gold, #d4af37);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.15);
+}
+.pp-cover {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 1px solid var(--line, rgba(255,255,255,0.08));
+}
+.pp-card-body {
+  padding: 22px 24px 18px;
+}
+.pp-card-body h3 {
+  font-family: var(--serif, 'Noto Serif TC', serif);
+  font-size: 20px;
+  color: var(--gold, #d4af37);
+  margin: 0 0 12px;
+  letter-spacing: 0.04em;
+}
+.pp-card-body .pp-desc {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text, #e8e8e8);
+  margin: 0 0 18px;
+}
+.pp-card-body .pp-desc strong {
+  color: var(--gold, #d4af37);
+}
+#pp-cta {
+  margin-bottom: 12px;
+  letter-spacing: 0.08em;
+}
+.pp-card-body .pp-note {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: var(--text-soft, #a8a8a8);
+  opacity: 0.7;
+  line-height: 1.6;
+  font-style: italic;
+}
+@media (max-width: 600px) {
+  .pp-card-body { padding: 18px 18px 14px; }
+  .pp-card-body h3 { font-size: 17px; }
+  .pp-card-body .pp-desc { font-size: 13px; }
+}
