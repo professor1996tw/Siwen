@@ -607,10 +607,17 @@ const QimenEngine = (function() {
     '休':1, '死':2, '伤':3, '杜':4,
     '開':6, '惊':7, '生':8, '景':9
   };
+  // v3.1: 九星本位 (修正天禽 = 中宮 5, 之前誤用死門本位 2)
+  // 七顆星本位剛好等於對應門本位 (休/坎1、生/艮8、傷/震3、杜/巽4、英/離9、芮/坤2、柱/兌7、心/乾6)
+  // 唯獨天禽本位 = 中宮 5, 跟死門本位 (坤2) 不同
+  const STAR_HOME_PALACE = {
+    '天蓬': 1, '天任': 8, '天冲': 3, '天輔': 4,
+    '天禽': 5, '天英': 9, '天芮': 2, '天柱': 7, '天心': 6
+  };
 
   function arrangeDoors(zhifuStar, dunType, hourGanZhi, hourXun, earthRawBoard) {
     const zhishiDoor = STAR_TO_DOOR[zhifuStar];
-    const home = DOOR_TO_HOME_PALACE[zhishiDoor];
+    const home = STAR_HOME_PALACE[zhifuStar];
     const result = {};
 
     if (!home) {
