@@ -166,29 +166,9 @@
     if (formRest) formRest.hidden = isOnline;
   };
 
-  // 動態調整「上課地」：線上課程自動填線上，其他課程只給實體地點
-  const updateLocationOptions = (courseName) => {
-    const locationField = document.getElementById('cf-location');
-    const locationHint = document.getElementById('locationHint');
-    if (!locationField || !locationHint) return;
-    const isOnline = courseName.includes('線上課程');
-    [...locationField.options].forEach((o) => {
-      if (o.value === '線上' || o.textContent.includes('線上')) o.remove();
-    });
-    if (isOnline) {
-      const opt = document.createElement('option');
-      opt.value = '線上';
-      opt.textContent = '線上（自動）';
-      opt.selected = true;
-      locationField.appendChild(opt);
-      locationField.value = '線上';
-      locationHint.style.display = 'block';
-      locationHint.textContent = '※ 線上課程不需選實體上課地，已自動設為「線上」';
-    } else {
-      locationField.value = '';
-      locationHint.style.display = 'none';
-    }
-  };
+  // v4.1: 所在地改為兩個獨立輸入框 (國家 + 城市), 不再自動填「線上」
+  // 線上課程已切到 PressPlay 模式 (表單整組隱藏), 不會觸發此函式
+  const updateLocationOptions = () => { /* noop: kept for backward compat with existing call sites */ };
 
   // courseName === '__CTA__' 表示從「立即報名」按鈕進來，顯示下拉
   // 否則表示從卡片進來，自動帶入並隱藏下拉
@@ -324,6 +304,12 @@
       try {
         const formData = new URLSearchParams();
         new FormData(courseForm).forEach((v, k) => formData.append(k, v));
+        // v4.1: 把 location_country + location_city 組合成單一 location 欄位（Apps Script 後端不必改）
+        const lcCountry = (courseForm.querySelector('#cf-location-country') || {}).value || '';
+        const lcCity = (courseForm.querySelector('#cf-location-city') || {}).value || '';
+        if (lcCountry || lcCity) {
+          formData.append('location', (lcCountry + ' / ' + lcCity).trim());
+        }
         const action = courseForm.action;
 
         // 如果還沒設 GAS / Formspree endpoint，就改用前端示範

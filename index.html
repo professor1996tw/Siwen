@@ -1652,36 +1652,23 @@
         </div>
         <div class="field-row">
           <div class="field">
-            <label for="cf-location">所在地 <span class="req">*</span></label>
-            <select id="cf-location" name="location" required>
-              <option value="">請選擇</option>
-              <optgroup label="台灣">
-                <option>台北</option>
-                <option>新北</option>
-                <option>桃園</option>
-                <option>新竹</option>
-                <option>台中</option>
-                <option>嘉義</option>
-                <option>台南</option>
-                <option>高雄</option>
-                <option>宜蘭</option>
-                <option>花蓮</option>
-                <option>其他（台灣縣市）</option>
-              </optgroup>
-              <option value="海外">海外（其他國家）</option>
-            </select>
-            <small class="field-hint" id="locationHint" style="color:var(--text-dim);font-size:11px;margin-top:4px;">海外學員可選「海外」, 詳細地點請於下方留言告知</small>
+            <label for="cf-location-country">所在國家 <span class="req">*</span></label>
+            <input type="text" id="cf-location-country" name="location_country" required placeholder="例：台灣" />
           </div>
           <div class="field">
-            <label for="cf-exp">命理基礎</label>
-            <select id="cf-exp" name="exp">
-              <option value="">請選擇</option>
-              <option>完全沒接觸過</option>
-              <option>讀過一些書／影片</option>
-              <option>有學過其他命理</option>
-              <option>有學過奇門基礎</option>
-            </select>
+            <label for="cf-location-city">所在城市 <span class="req">*</span></label>
+            <input type="text" id="cf-location-city" name="location_city" required placeholder="例：台北" />
           </div>
+        </div>
+        <div class="field">
+          <label for="cf-exp">命理基礎</label>
+          <select id="cf-exp" name="exp">
+            <option value="">請選擇</option>
+            <option>完全沒接觸過</option>
+            <option>讀過一些書／影片</option>
+            <option>有學過其他命理</option>
+            <option>有學過奇門基礎</option>
+          </select>
         </div>
         <div class="field">
           <label for="cf-msg">想對老師說的話</label>
