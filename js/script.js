@@ -304,12 +304,6 @@
       try {
         const formData = new URLSearchParams();
         new FormData(courseForm).forEach((v, k) => formData.append(k, v));
-        // v4.1: 把 location_country + location_city 組合成單一 location 欄位（Apps Script 後端不必改）
-        const lcCountry = (courseForm.querySelector('#cf-location-country') || {}).value || '';
-        const lcCity = (courseForm.querySelector('#cf-location-city') || {}).value || '';
-        if (lcCountry || lcCity) {
-          formData.append('location', (lcCountry + ' / ' + lcCity).trim());
-        }
         const action = courseForm.action;
 
         // 如果還沒設 GAS / Formspree endpoint，就改用前端示範
